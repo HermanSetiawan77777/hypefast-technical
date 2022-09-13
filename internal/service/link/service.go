@@ -6,40 +6,58 @@ import (
 	"time"
 )
 
-var Links []*Link
+//var Links []*Link
+
+var m = make(map[string]*Link)
 
 const idLength = 6
 
 //Ideally we should create a service struct
 
-func AddNewLink(url string) *Link {
+func AddNewLink(url, optionShort string) *Link {
+	var tempstr string
+	//sharon.raissa@hypefast.id
+	if optionShort == "" {
+		tempstr = generateUniqueId()
+	}
+	if m[optionShort] != nil && optionShort != "" {
+		fmt.Println(m[optionShort])
+		tempstr = generateUniqueId()
+	} else if optionShort != "" {
+		tempstr = optionShort
+	}
 	newLink := &Link{
-		Id:            generateUniqueId(),
+		Id:            tempstr,
 		Url:           url,
 		CreatedAt:     time.Now(),
 		RedirectCount: 0,
 	}
-	Links = append(Links, newLink)
+	m[tempstr] = newLink
+	//Links = append(Links, newLink)
 	return newLink
 }
 
 func GetLinkByID(id string) *Link {
-	for _, l := range Links {
-		if l.Id == id {
-			return l
-		}
+	if m[id] != nil {
+		return m[id]
 	}
 
 	return nil
 }
 
 func UpdateRedirectCount(id string, newRedirectCount int) error {
-	for _, l := range Links {
-		if l.Id == id {
-			l.RedirectCount = newRedirectCount
-			return nil
-		}
+
+	if m[id] != nil {
+		m[id].RedirectCount = newRedirectCount
+		return nil
 	}
+
+	// for _, l := range m {
+	// 	if l.Id == id {
+	// 		l.RedirectCount = newRedirectCount
+	// 		return nil
+	// 	}
+	// }
 
 	return fmt.Errorf("Link not found")
 }

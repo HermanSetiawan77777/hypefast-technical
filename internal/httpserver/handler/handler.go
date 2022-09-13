@@ -12,7 +12,8 @@ import (
 
 func ShortenUrl(w http.ResponseWriter, r *http.Request) {
 	type shortenPayload struct {
-		Url string `json:"url"`
+		Url         string `json:"url"`
+		OptionShort string `json:"OptionShort"`
 	}
 
 	var p *shortenPayload
@@ -35,7 +36,7 @@ func ShortenUrl(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	newLink := link.AddNewLink(p.Url)
+	newLink := link.AddNewLink(p.Url, p.OptionShort)
 
 	//host should be in env so it will automatically update when the host is changed
 	response["link"] = fmt.Sprintf("http://localhost:8080/%s", newLink.Id)

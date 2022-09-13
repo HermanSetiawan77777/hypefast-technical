@@ -7,7 +7,8 @@ import (
 
 func TestLink(t *testing.T) {
 	url := "https://github.com/hermansetiawan77777"
-	newLink := link.AddNewLink(url)
+	asd := "https://github.com/hermansetiawan77777"
+	newLink := link.AddNewLink(url, asd)
 	if newLink == nil {
 		t.Errorf("Link not returned")
 		// add return to eliminate linting on line 16 newLink.Id (newLink nil possibility)
@@ -16,8 +17,6 @@ func TestLink(t *testing.T) {
 
 	if newLink.Url == "" {
 		t.Errorf("Please fill url")
-		// add return to eliminate linting on line 16 newLink.Id (newLink nil possibility)
-		return
 	}
 
 	existingLink := link.GetLinkByID(newLink.Id)
